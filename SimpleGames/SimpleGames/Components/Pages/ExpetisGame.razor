@@ -1,4 +1,5 @@
 ﻿@page "/expetisgame"
+@using SimpleGames.Client.Models
 
 <PageTitle>Expeti's Game</PageTitle>
 
@@ -10,8 +11,70 @@
 	Players can not make the same guess twice, and the game will continue one player guesses the target correctly. 
 </p>
 
+@if (!expetisGame.StillGuessing)
+{
+	<h3>Game Over!</h3>
+	<p> The target number was: @expetisGame.TargetNumber</p>
+	<button class="btn btn-primary" @onclick="StartGame">Start New Game</button>
+}
+else
+{
+	<button @onclick="Test">Test Button</button>
+}
 
 
 @code {
+
+
+	private ExpetiGameState expetisGame = new ExpetiGameState();    //create new Expeti's Game instance
+
+	private int currentGuess;   // create variable to hold the current guess
+
+	private string guessFeedback; // create variable to hold the guess feedback
+
+	private string debugMessage;
+
+	protected override void OnInitialized() // Automatically start the game when the component is initialized    
+	{        
+		StartGame();    
+	}
+
+
+	private void StartGame()    // create methods to update game state
+	{
+		expetisGame.Start();
+		currentGuess = 0;
+		guessFeedback = string.Empty; // Clear feedback message
+	}
+
+	private void Test()
+	{
+		Console.WriteLine("You touched test");	
+	}
+
+	private void SubmitGuess()
+	{
+		debugMessage = "SubmitGuess Method Called";
+		Console.Error.WriteLine("SubmitGuess Method");
+		// if (expetisGame.IsValidGuess(currentGuess))
+		// {
+		// 	if (currentGuess == expetisGame.TargetNumber)	Check if the current guess matches the target
+		// 	{
+		// 		expetisGame.GameOver(); declare winner
+		// 		guessFeedback = string.Empty; Clear any previous messages
+		// 		return;
+		// 	}
+
+
+		// 	expetisGame.TrackPlayerGuess(currentGuess);	Add correct guess to the game state Guesses List
+
+		// }
+		// else
+		// {
+		// 	Console.WriteLine("InValid Block");
+		// 	guessFeedback = "Invalid guess! You've already guessed that number."; Set invalid feedback message
+		// }
+
+	}
 
 }
