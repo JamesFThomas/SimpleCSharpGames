@@ -1,0 +1,68 @@
+﻿@rendermode InteractiveAuto
+
+@using SimpleGames.Client.Models
+
+@if (!expetisGame.StillGuessing)
+{
+	<h3>Game Over!</h3>
+	<p> The target number was: @expetisGame.TargetNumber</p>
+	<button class="btn btn-primary" @onclick="StartGame">Start New Game</button>
+}
+else
+{
+	<p>Guess a number between 0 and 9:</p>
+	<input type="number" @bind="currentGuess" min="0" max="9" />
+	<button class="btn btn-primary" @onclick="SubmitGuess">Submit Guess</button>
+
+	@if (!string.IsNullOrEmpty(guessFeedback))
+	{
+		<div class="alert alert-warning">@guessFeedback</div>
+	}
+
+}
+
+@code {
+
+	private ExpetiGameState expetisGame = new ExpetiGameState();
+
+	private int currentGuess;
+
+	private string? guessFeedback;
+
+	protected override void OnInitialized() // Automatically start the game when the component is initialized
+	{
+		StartGame();
+	}
+
+	private void StartGame()    // create methods to update game state
+	{
+		expetisGame.Start();
+		currentGuess = 0;
+		guessFeedback = string.Empty; // Clear feedback message
+	}
+
+	private void SubmitGuess()
+	{
+		if (expetisGame.IsValidGuess(currentGuess))
+		{
+			Console.WriteLine("Valid Block");
+			if (currentGuess == expetisGame.TargetNumber)   // Check if the current guess matches the target
+			{
+				expetisGame.GameOver(); // declare winner
+				guessFeedback = string.Empty; // Clear any previous messages
+				return;
+			}
+
+
+			expetisGame.TrackPlayerGuess(currentGuess); // Add correct guess to the game state Guesses List
+
+		}
+		else
+		{
+			Console.WriteLine("InValid Block");
+			guessFeedback = "Invalid guess! You've already guessed that number."; // Set invalid feedback message
+		}
+
+	}
+
+}
