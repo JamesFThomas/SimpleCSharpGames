@@ -2,40 +2,48 @@
 
 @using SimpleGames.Client.Models
 
-@if (!expetisGame.StillGuessing)
+@if (!gameStarted)
 {
-	<h3>You Won!</h3>
-	<p class="alert alert-success"> @expetisGame.TargetNumber was the target!</p>
-	<button class="btn btn-primary" @onclick="StartGame">Play Again</button>
+	<button class="btn btn-primary" @onclick="StartGame">Play Game</button>
 }
 else
 {
-	<p>Guess a number between 0 and 9:</p>
-	<input type="number" @bind="currentGuess" min="0" max="9" />
-	<button class="btn btn-primary" @onclick="SubmitGuess">Submit Guess</button>
 
-	@if (!string.IsNullOrEmpty(guessFeedback))
+	@if (!expetisGame.StillGuessing)
 	{
-		@if (!string.IsNullOrEmpty(bgColor) && bgColor.Equals("success"))
-		{
-			<div class="alert alert-warning">@guessFeedback</div>
-		}
-		else
-		{
-			<div class="alert alert-danger">@guessFeedback</div>
-		}
+		<h3>You Won!</h3>
+		<p class="alert alert-success"> @expetisGame.TargetNumber was the target!</p>
+		<button class="btn btn-primary" @onclick="StartGame">Play Again</button>
 	}
-
-	@if (expetisGame.Guesses.Count > 0)
+	else
 	{
-		<h6>Previous Guesses:</h6>
-		@foreach (var guess in expetisGame.Guesses)
+		<p>Guess a number between 0 and 9:</p>
+		<input type="number" @bind="currentGuess" min="0" max="9" />
+		<button class="btn btn-primary" @onclick="SubmitGuess">Submit Guess</button>
+
+		@if (!string.IsNullOrEmpty(guessFeedback))
 		{
-			<p class="d-inline-flex p-2">@guess</p>
+			@if (!string.IsNullOrEmpty(bgColor) && bgColor.Equals("success"))
+			{
+				<div class="alert alert-warning">@guessFeedback</div>
+			}
+			else
+			{
+				<div class="alert alert-danger">@guessFeedback</div>
+			}
 		}
+
+		@if (expetisGame.Guesses.Count > 0)
+		{
+			<h6>Previous Guesses:</h6>
+			@foreach (var guess in expetisGame.Guesses)
+			{
+				<p class="d-inline-flex p-2">@guess</p>
+			}
 	
-	}
+		}
 
+	}
 }
 
 @code {
@@ -48,13 +56,12 @@ else
 
 	private string? bgColor;
 
-	protected override void OnInitialized() 
-	{
-		StartGame();
-	}
+	private bool gameStarted = false; // Track if the game has started
+
 
 	private void StartGame()    
 	{
+		gameStarted = true; 
 		expetisGame.Start();
 		currentGuess = 0;
 		guessFeedback = string.Empty; 
