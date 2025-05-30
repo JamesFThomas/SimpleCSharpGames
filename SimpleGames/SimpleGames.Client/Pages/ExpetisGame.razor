@@ -4,9 +4,9 @@
 
 @if (!expetisGame.StillGuessing)
 {
-	<h3>Game Over!</h3>
-	<p> The target number was: @expetisGame.TargetNumber</p>
-	<button class="btn btn-primary" @onclick="StartGame">Start New Game</button>
+	<h3>You Won!</h3>
+	<p class="alert alert-success"> @expetisGame.TargetNumber was the target!</p>
+	<button class="btn btn-primary" @onclick="StartGame">Play Again</button>
 }
 else
 {
@@ -16,7 +16,24 @@ else
 
 	@if (!string.IsNullOrEmpty(guessFeedback))
 	{
-		<div class="alert alert-warning">@guessFeedback</div>
+		@if (!string.IsNullOrEmpty(bgColor) && bgColor.Equals("success"))
+		{
+			<div class="alert alert-warning">@guessFeedback</div>
+		}
+		else
+		{
+			<div class="alert alert-danger">@guessFeedback</div>
+		}
+	}
+
+	@if (expetisGame.Guesses.Count > 0)
+	{
+		<h6>Previous Guesses:</h6>
+		@foreach (var guess in expetisGame.Guesses)
+		{
+			<p class="d-inline-flex p-2">@guess</p>
+		}
+	
 	}
 
 }
@@ -29,38 +46,42 @@ else
 
 	private string? guessFeedback;
 
-	protected override void OnInitialized() // Automatically start the game when the component is initialized
+	private string? bgColor;
+
+	protected override void OnInitialized() 
 	{
 		StartGame();
 	}
 
-	private void StartGame()    // create methods to update game state
+	private void StartGame()    
 	{
 		expetisGame.Start();
 		currentGuess = 0;
-		guessFeedback = string.Empty; // Clear feedback message
+		guessFeedback = string.Empty; 
 	}
 
 	private void SubmitGuess()
 	{
 		if (expetisGame.IsValidGuess(currentGuess))
 		{
-			Console.WriteLine("Valid Block");
-			if (currentGuess == expetisGame.TargetNumber)   // Check if the current guess matches the target
+			if (currentGuess == expetisGame.TargetNumber)							// Check if the current guess matches the target
 			{
-				expetisGame.GameOver(); // declare winner
-				guessFeedback = string.Empty; // Clear any previous messages
+				expetisGame.GameOver(); 
+				guessFeedback = string.Empty;		
 				return;
 			}
 
+			bgColor = "success";
+			guessFeedback = $"Valid guess but {currentGuess} is not the target!";	// Set feedback message for incorrect guess
 
-			expetisGame.TrackPlayerGuess(currentGuess); // Add correct guess to the game state Guesses List
+
+			expetisGame.TrackPlayerGuess(currentGuess);								// Add correct guess to the game state Guesses List
 
 		}
 		else
 		{
-			Console.WriteLine("InValid Block");
-			guessFeedback = "Invalid guess! You've already guessed that number."; // Set invalid feedback message
+			bgColor = "danger";
+			guessFeedback = $"Invalid guess {currentGuess} has already been guessed.";   // Set invalid feedback message
 		}
 
 	}
