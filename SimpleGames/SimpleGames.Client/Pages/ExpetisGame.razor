@@ -19,7 +19,15 @@ else
 	{
 		<p class="m-2">Guess a number between 0 and 9:</p>
 		<p class="m-2">Player Turn: @playerTurn</p>
-		<input class="m-2 p-1" type="number" @bind="currentGuess" min="0" max="9" />
+        <input 
+			type="number" 
+			class="m-2 p-1" 
+			min="0" 
+			max="9" 
+			@bind-value="currentGuess"
+			@bind-value:event="oninput"
+			@onkeydown="HandleKeyDown" />
+
 		<button class="btn btn-primary " @onclick="SubmitGuess">Submit Guess</button>
 
 		@if (!string.IsNullOrEmpty(guessFeedback))
@@ -111,6 +119,16 @@ else
 			guessFeedback = $"Invalid guess {currentGuess} has already been guessed.";   // Set invalid feedback message
 		}
 
+	}
+
+	private async Task HandleKeyDown(KeyboardEventArgs e)
+	{
+		if (e.Key == "Enter")
+		{
+			SubmitGuess();
+			// Optionally, prevent default form submission if inside a form
+			await Task.CompletedTask;
+		}
 	}
 
 }
