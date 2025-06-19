@@ -1,0 +1,24 @@
+﻿@page "/tictactoe"
+
+@using SimpleGames.Client.Models
+@using SimpleGames.Client.Pages
+
+
+<h1>@GameTitle</h1>
+
+<p>	@GameDescription1 </p>
+<p>	@GameDescription2 </p>
+<p>	@GameDescription3 </p>
+
+
+@code {
+
+	private string GameTitle = "Tic Tac Toe";
+
+	// Game description or instructions for Tic Tac Toe here
+	private string GameDescription1 = "Tic Tac Toe is a classic two-player game where players take turns marking a square in a 3x3 grid.";
+	private string GameDescription2 = "Players can choose to be either make the 'X' or 'O' mark to occupy a space on the game board.";
+	private string GameDescription3 = "The first player to get three of their marks in a row, column, or diagonal wins the game.";
+
+
+}
