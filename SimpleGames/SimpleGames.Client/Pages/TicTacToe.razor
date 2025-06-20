@@ -2,6 +2,21 @@
 
 @using SimpleGames.Client.Models
 
+<div class="text-center">
+    <!-- Center the child elements -->
+    <h3>TTT Working</h3>
+    <div class="d-flex justify-content-center">
+        <!-- Flexbox layout for grandchild divs -->
+        <div class="m-2 p-3 bg-primary text-white" style="flex: 1; min-width: 200px; min-height: 200px;">User input</div> <!-- Increased size and background color -->
+        <div class="m-2 p-3 bg-success text-white" style="flex: 1; min-width: 200px; min-height: 200px;">Game Board</div> <!-- Increased size and background color -->
+    </div>
+</div>
+
 @code {
-	//Add game code here
+    //Add game code here
+    // Get gameboard to render on screen.
+    TicTacToeBoard board = new TicTacToeBoard();
+
+
+
 }
